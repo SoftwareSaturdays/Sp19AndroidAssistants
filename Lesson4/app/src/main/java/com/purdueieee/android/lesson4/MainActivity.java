@@ -2,14 +2,19 @@ package com.purdueieee.android.lesson4;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -64,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void updateLocation(Location location) {
+        TextView textView = findViewById(R.id.tv_gps);
+        textView.setText(location.toString());
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -78,5 +88,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void onSend(View view) {
+        EditText editText = findViewById(R.id.editText);
+        String address = editText.getText().toString();
+        Uri uri = Uri.parse("geo:0,0?q=" + address);
+        Intent map_intent = new Intent(Intent.ACTION_VIEW, uri);
+        map_intent.setPackage("com.google.android.apps.maps");
+        startActivity(map_intent);
     }
 }
