@@ -17,6 +17,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+    InnerClass ic = new InnerClass();
+    StaticInnerClass sic = new StaticInnerClass();
+
+    class InnerClass {
+        InnerClass() {
+            // Reference to the instance of the outer class that
+            // instantiated this one.
+            MainActivity ma = MainActivity.this;
+        }
+    }
+
+    static class StaticInnerClass {
+        StaticInnerClass() {
+            // Note that static inner classes do not have a reference
+            // to an instance of the outer class.
+            MainActivity ma = MainActivity.this;
+        }
+    }
+
 
     private static final int MY_LOCATION_REQUEST = 42;
 
@@ -97,5 +116,10 @@ public class MainActivity extends AppCompatActivity {
         Intent map_intent = new Intent(Intent.ACTION_VIEW, uri);
         map_intent.setPackage("com.google.android.apps.maps");
         startActivity(map_intent);
+    }
+
+    public void onClickPhotoActivity(View view) {
+        Intent intent = new Intent(this, PhotoActivity.class);
+        startActivity(intent);
     }
 }
