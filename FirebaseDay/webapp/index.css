@@ -1,0 +1,50 @@
+* { 
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    background-color: #ffebcc;
+    text-align: center;
+    font-family: helvetica;
+    color: #111;
+
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "header"
+        "messages";
+}
+
+header {
+    grid-area: header;
+
+    background-color: #ff9900;
+    padding: 1%;
+}
+
+#messages {
+    grid-area: messages;
+    
+
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: minmax(100px, 1fr);
+
+    margin-top: 1%;
+    margin-bottom: 3%;
+    margin-left: 7%;
+    margin-right: 7%;
+}
+
+.message {
+    border-radius: 5px;
+    font-size: 150%;
+
+    position: relative;
+    text-align: center;
+
+    border: 2px solid #111;
+    background-color: #ffc266;
+}
