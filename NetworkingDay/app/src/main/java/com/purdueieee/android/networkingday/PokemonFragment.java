@@ -1,5 +1,6 @@
 package com.purdueieee.android.networkingday;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,10 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.purdueieee.android.networkingday.dummy.DummyContent;
-import com.purdueieee.android.networkingday.dummy.DummyContent.DummyItem;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -68,7 +65,13 @@ public class PokemonFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPokemonRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            // Add the lines below
+            PokemonModel model = ViewModelProviders.of(this).get(PokemonModel.class);
+            final MyPokemonRecyclerViewAdapter adapter =
+                    new MyPokemonRecyclerViewAdapter(model, mListener);
+            model.pokemonList.observe(this, adapter::submitList);
+
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
@@ -103,6 +106,6 @@ public class PokemonFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Pokemon item);
     }
 }

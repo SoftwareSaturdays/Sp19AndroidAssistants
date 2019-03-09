@@ -1,43 +1,29 @@
 package com.purdueieee.android.networkingday;
 
-import android.arch.core.util.Function;
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.arch.paging.DataSource;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
-import android.support.annotation.NonNull;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 
-import java.util.List;
+public class PokemonModel extends AndroidViewModel {
+    final RequestQueue mQueue;
+    LiveData<PagedList<Pokemon>> pokemonList;
 
-public class PokemonModel extends ViewModel {
-    public class Pokemon {
-
+    PokemonModel(Application application) {
+        super(application);
+        mQueue = Volley.newRequestQueue(application);
+        pokemonList = new LivePagedListBuilder<>(
+                new PokemonFactory(), 20).build();
     }
 
     private class PokemonFactory extends DataSource.Factory<Integer, Pokemon> {
-
         @Override
         public DataSource<Integer, Pokemon> create() {
-            return new PokemonDataSource() {
-                @NonNull
-                @Override
-                public <ToValue> DataSource<Integer, ToValue> mapByPage(@NonNull Function<List<Pokemon>, List<ToValue>> function) {
-                    return super.mapByPage(function);
-                }
-
-                @NonNull
-                @Override
-                public <ToValue> DataSource<Integer, ToValue> map(@NonNull Function<Pokemon, ToValue> function) {
-                    return super.map(function);
-                }
-            };
+            return new PokemonDataSource(mQueue);
         }
-    }
-
-    LiveData<PagedList<Pokemon>> pokemonList;
-
-    PokemonModel() {
-        pokemonList = new LivePagedListBuilder<>(new PokemonFactory(), 20).build();
     }
 }
