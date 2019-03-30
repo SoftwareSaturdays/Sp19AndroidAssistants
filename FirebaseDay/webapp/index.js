@@ -33,8 +33,17 @@ const db = firebase.firestore();
 
 // get live updates
 db.collection("messages").orderBy('timestamp', 'asc').onSnapshot(function(querySnapshot) {
+  // empty message board
   clearAllMessages();
+
+  // cycle through all documents
   querySnapshot.forEach((doc) => {
+    // only add messages if they have content
+    if (!doc.data().content || !doc.data().uid) {
+      return;
+    }
+
+    // add message to board
     addMessage(
       ((!!doc.data().author)? doc.data().author  + ' ' : '') +
       '(uid: ' + doc.data().uid.substring(0, 5) + '...): ' +
