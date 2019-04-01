@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "747480959256",
+    "firebase_url": "https://spring-android-firebase-day.firebaseio.com",
+    "project_id": "spring-android-firebase-day",
+    "storage_bucket": "spring-android-firebase-day.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747480959256:android:9b28bfb792f20b7a",
+        "android_client_info": {
+          "package_name": "com.example.nativeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747480959256-k7570gubotgdbf8kuff7gmuuehuku19u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOgXnP9gLSYGWj6kw5ZFEs85AmOZexZFk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
