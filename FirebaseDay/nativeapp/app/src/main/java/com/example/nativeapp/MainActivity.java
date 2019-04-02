@@ -9,10 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,37 +23,41 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String TAG = "FIREBASE-DAY";
-
+    // auth instance
     private FirebaseAuth mAuth;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // Firestore instance
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // create new auth instance
         mAuth = FirebaseAuth.getInstance();
 
-        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                // If sign in fails, display a message to the user.
-                if (!task.isSuccessful()) {
-                    Log.w(TAG, "signInAnonymously:failure", task.getException());
-                    Toast.makeText(MainActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+        // sign in, handle success and failure
+        mAuth.signInAnonymously()
+                .addOnSuccessListener(this, new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        Toast.makeText(MainActivity.this, "Authenticated!", Toast.LENGTH_SHORT).show();
 
-                    updateUI(null);
+                        // retrieve the newly signed-in user
+                        FirebaseUser user = mAuth.getCurrentUser();
 
-                    return;
-                }
+                        updateUI(user);
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "Authentication failed :(", Toast.LENGTH_SHORT).show();
 
-                // Sign in success, update UI with the signed-in user's information
-                Log.d(TAG, "signInAnonymously:success");
-                FirebaseUser user = mAuth.getCurrentUser();
-                updateUI(user);
-            }
-        });
+                        updateUI(null);
+                    }
+                });
     }
 
     @Override
@@ -110,13 +112,21 @@ public class MainActivity extends AppCompatActivity {
             .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
-                    Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                    Toast.makeText(
+                            MainActivity.this,
+                            "DocumentSnapshot written with ID: " + documentReference.getId(),
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.w(TAG, "Error adding document", e);
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Error adding document",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             });
 
@@ -124,3 +134,9 @@ public class MainActivity extends AppCompatActivity {
         etMessage.setText("");
     }
 }
+
+
+ data.put("author", author);
+ // get the author's name
+        final EditText etAuthor = findViewById(R.id.etAuthor);
+        final String author = etAuthor.getText().toString();
